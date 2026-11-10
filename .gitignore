@@ -4,3 +4,4 @@ __pycache__/
 venv/
 .path_to_learnsets.txt
 .write_idx.npy
+.vscode

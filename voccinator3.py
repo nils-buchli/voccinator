@@ -70,6 +70,7 @@ class VoccinatorV3() :
             {"name" : "Edit Existing Learnset", "value" : self.edit_file}, 
             {"name" : "Show Learnset", "value" : self.show_file}, 
             {"name" : "Write Practise", "value" : self.write_modus}, 
+            {"name" : "Write Practise (Reverse)", "value" : self.write_modus_reverse}, 
             {"name" : "Delete Words From Learnset", "value" : self.del_word_from_file}, 
             {"name" : "Exit", "value" : self.exit_program}, 
         ]
@@ -227,7 +228,7 @@ class VoccinatorV3() :
             print(self.texts["empty-file-info"])
 
     # give user word -> ask for definition. User can save/load progress
-    def write_modus(self) : 
+    def write_modus(self, reverse=False) : 
         print(self.texts["write-modus-header"])
         print(self.texts["write-modus-info"])
 
@@ -237,6 +238,10 @@ class VoccinatorV3() :
         pairs = self._read_file(file_name)
         if not pairs : 
             return
+
+        # in reverse mode, swap columns: show definition first, ask for the word
+        if reverse :
+            pairs = [(d, w) for w, d in pairs]
 
         all_idx = np.arange(len(pairs))
         np.random.shuffle(all_idx)
@@ -261,6 +266,10 @@ class VoccinatorV3() :
                 np.random.shuffle(all_idx)
                 print(f"Wrong! Solution: {d}\n")
         print(self.texts["write-modus-success"])
+
+    # reverse write modus: show definition, ask for the word
+    def write_modus_reverse(self) :
+        self.write_modus(reverse=True)
 
     # delete specific lines form a file
     def del_word_from_file(self) : 
